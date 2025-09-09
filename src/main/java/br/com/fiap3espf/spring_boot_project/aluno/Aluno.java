@@ -1,14 +1,13 @@
-package br.com.fiap3espf.spring_boot_project.instrutor;
+package br.com.fiap3espf.spring_boot_project.aluno;
 
 import br.com.fiap3espf.spring_boot_project.endereco.Endereco;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Table(name = "instrutores")
-@Entity(name = "Instrutor")
+@Table(name = "alunos")
+@Entity(name = "Aluno")
 @Getter @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode(of = "id")
-public class Instrutor {
-
+public class Aluno {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -17,15 +16,11 @@ public class Instrutor {
     @Column(unique = true, nullable = false)
     private String email;
 
-    // telefone existe mas NÃO aparece na listagem
+    @Column(nullable = false)
     private String telefone;
 
     @Column(unique = true, nullable = false)
-    private String cnh;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Especialidade especialidade;
+    private String cpf;
 
     @Embedded
     private Endereco endereco;
@@ -33,18 +28,16 @@ public class Instrutor {
     @Column(nullable = false)
     private boolean ativo = true;
 
-    public Instrutor(DadosCadastroInstrutor dados) {
+    public Aluno(DadosCadastroAluno dados) {
         this.nome = dados.nome();
         this.email = dados.email();
-        //this.telefone = dados.telefone();
-        this.cnh = dados.cnh();
-        this.especialidade = dados.especialidade();
+        this.telefone = dados.telefone();
+        this.cpf = dados.cpf();
         this.endereco = new Endereco(dados.endereco());
         this.ativo = true;
     }
 
-    public void atualizar(DadosAtualizacaoInstrutor dados) {
-        // NÃO alterar: email, cnh, especialidade
+    public void atualizar(DadosAtualizacaoAluno dados) {
         if (dados.nome() != null && !dados.nome().isBlank()) this.nome = dados.nome();
         if (dados.telefone() != null && !dados.telefone().isBlank()) this.telefone = dados.telefone();
         if (dados.endereco() != null) this.endereco.atualizar(dados.endereco());
